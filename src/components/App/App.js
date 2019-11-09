@@ -1,36 +1,18 @@
 import React from 'react';
 import './App.css';
-import PropTypes from 'prop-types';
+import TabPanel from '../TabPanel';
 import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider, makeStyles } from '@material-ui/styles';
+import green from '@material-ui/core/colors/green';
+// Components
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+// Icons
+import ClearIcon from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`form-tabpanel-${index}`}
-      aria-labelledby={`form-tab-${index}`}
-      {...other}
-    >
-      <Box p={3}>{children}</Box>
-    </Typography>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
 
 function a11yProps(index) {
   return {
@@ -60,25 +42,65 @@ const theme = createMuiTheme({
   }
 });
 
+const useStyles = makeStyles(theme => ({
+  success: {
+    color: green[700]
+  }
+}));
+
 function App() {
-  const [value, setValue] = React.useState(0);
+  const classes = useStyles();
+  const [activeTab, setActiveTab] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setActiveTab(newValue);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="form tabs">
+        <Tabs value={activeTab} onChange={handleChange} aria-label="form tabs">
           <Tab label="Required Input Log" {...a11yProps(0)} />
           <Tab label="Nomination Details" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
-        Item One
+
+      <TabPanel value={activeTab} index={0}>
+        <Grid container>
+          <Grid item xs={11}>
+            Has TMR or LGA been selected?
+          </Grid>
+          <Grid item xs={1}>
+            <DoneIcon className={classes.success} />
+          </Grid>
+          <Grid item xs={11}>
+            Has RPEQ's name been entered?
+          </Grid>
+          <Grid item xs={1}>
+            <ClearIcon color="error" />
+          </Grid>
+          <Grid item xs={11}>
+            Has RPEQ's position been entered?
+          </Grid>
+          <Grid item xs={1}>
+            <ClearIcon color="error" />
+          </Grid>
+          <Grid item xs={11}>
+            Has RPEQ's email address been entered?
+          </Grid>
+          <Grid item xs={1}>
+            <ClearIcon color="error" />
+          </Grid>
+          <Grid item xs={11}>
+            Has RPEQ's phone number been entered?
+          </Grid>
+          <Grid item xs={1}>
+            <ClearIcon color="error" />
+          </Grid>
+        </Grid>
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      
+      <TabPanel value={activeTab} index={1}>
         Item Two
       </TabPanel>
     </ThemeProvider>
